@@ -17,15 +17,15 @@ This is an open source, GPU-based program for modeling conjunctive 2D surface an
 make build
 make
 ```
-<small>See or edit Makefile to get or change the executable file for the GCSFlow model  
-Note: NetCDF library and GPUs with computability 2.0 or greater are required to compile the code.</small>
+See or edit Makefile to get or change the executable file for the GCSFlow model  
+Note: NetCDF library and GPUs with computability 2.0 or greater are required to compile the code.
 
 
 
 ### Run  
 ```
-cd Example_folder
-./executable ../path_to_config/config_file.cfg
+cd bin
+./gcsflow ../path_to_config/config_file.cfg
 ```
 
 
