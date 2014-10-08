@@ -20,15 +20,15 @@ g++ 4.2 or newer
 
 To build
 ```
-make build
-make
+$ make build
+$ make
 ```
 
 
 ### Run  
 ```
-cd bin
-./gcsflow ../Test_Cases/path_to_test/config_filename.cfg
+$ cd bin
+$ ./gcsflow ../Test_Cases/path_to_test/config_filename.cfg
 ```
 Edit Makefile to change the compiling options.  
 Model options and parameters are in configuration files.
