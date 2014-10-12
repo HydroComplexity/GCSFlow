@@ -146,7 +146,7 @@ int NumericalModel(ProjectClass *Project, FileNameClass *File,
     GetOutlet<<<TSZ, BSZ>>>(h_d, hout_d, u2_d, uout_d, v2_d, vout_d, M, N, t_data);
 
     if (t_data % savestep == 0) {
-      SavePerStep(Project, Host2D, Host3D, File, M, N, P, t_data);
+      //SavePerStep(Project, Host2D, Host3D, File, M, N, P, t_data);
     }
   }
 

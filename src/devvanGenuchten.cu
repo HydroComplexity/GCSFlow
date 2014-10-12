@@ -29,9 +29,8 @@
 // --------------------------------------------------------------------
 
 __device__ void vanGenuchten(double *C, double *K, double *Ksat, double *theta,
-    double *h, double n, int size) {
-  double Se, h_, theta_, m;
-  m = 1.0 - 1.0/n;
+    double *h, double n, double m, int size) {
+  double Se, h_, theta_;
 
   for (int i = 0; i < size; i++) {
     // Convert pressure unit from [m] to [cm]

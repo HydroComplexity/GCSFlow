@@ -186,22 +186,16 @@ __device__ void SweXMatrix(double *a_x, double *b_x, double *c_x, double *d_x,
     c_x[k] = -0.5 * dt/dA * Keast;
 
     // IN and ET must be smaller than water depth h
-    PPTX = eRF[I];    
+    PPTX = eRF[I];
+    INX = IN[I];
     if (h_ > 0.0) {
       if (h_ > ET[t]) {
         ETX = ET[t];
       } else {
         ETX = h_;
-      }
-      
-      if (h_ > IN[I]) {
-        INX = IN[I];
-      } else {
-        INX = h_;
       }      
     } else {
       ETX = 0.0;
-      INX = 0.0;
     }
 
     // Vector right hand side
@@ -356,22 +350,15 @@ __device__ void SweYMatrix(double *a_y, double *b_y, double *c_y, double *d_y,
 
     // IN, and ET must be smaller than water depth h
     PPTY = eRF[I];
-    //INY = IN[I];
+    INY = IN[I];
     if (h_ > 0.0) {
       if (h_ > ET[t]) {
           ETY = ET[t];
       } else {
           ETY = h_;
       }
-
-      if (h_ > IN[I]) {
-          INY = IN[I];
-      } else {
-          INY = h_;
-      }      
     } else {
       ETY = 0.0;
-      INY = 0.0;
     }
 
     if (j == 1) {

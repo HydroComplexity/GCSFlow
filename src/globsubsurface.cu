@@ -51,7 +51,7 @@ __global__ void vanGenuchtenIntial(double *theta, double *K, double *Ksat,
 
     // Compute the volumetric moisture content [eqn 21]
     if (_h < 0) {
-      _theta = (theta_S - theta_R) / pow(1.0 + pow((alpha*(-_h)), n), m) + theta_R;
+      _theta = (theta_S-theta_R) / pow(1.0+pow((alpha*(-_h)), n), m) + theta_R;
     } else {
       _theta = theta_S;
     }
@@ -140,7 +140,7 @@ __global__ void RichZ(double *h_in, double *theta_in, double *K_in,
     // Loop for convergence test
     while (stop_flag == 0 && niter < maxiterZ) {
       // Get C, K, theta from vanGenuchten function
-      vanGenuchten(Cnp1m_z, Knp1m_z, Ksat_z, thetanp1m_z, hnp1m_z, nv, P);
+      vanGenuchten(Cnp1m_z, Knp1m_z, Ksat_z, thetanp1m_z, hnp1m_z, nv, mv, P);
 
       // Set up the tri-digonal system in z-direction
       RichZMatrix(a_z, b_z, c_z, d_z, Cnp1m_z, Knp1m_z, K_in, hnp1m_z, h_in,
@@ -168,7 +168,7 @@ __global__ void RichZ(double *h_in, double *theta_in, double *K_in,
         hnp1mp1_z[P-1] = hnp1mp1_z[P-2] + dz;
 
         // Get C, K, theta from vanGenuchten function
-        vanGenuchten(Cnp1m_z, Knp1m_z, Ksat_z, thetanp1m_z, hnp1mp1_z, nv, P);
+        vanGenuchten(Cnp1m_z, Knp1m_z, Ksat_z, thetanp1m_z, hnp1mp1_z, nv, mv, P);
 
         // Update solution from vectors to the global matrix
         for (int k = 0; k < P; k++) {
@@ -224,7 +224,10 @@ __global__ void RichZ(double *h_in, double *theta_in, double *K_in,
         h_out[k*M*N+j*N+i] = hnp1mp1_z[k];
         theta_out[k*M*N+j*N+i] = thetanp1mp1_z[k];
       }
+      
       IN[j*N+i] = -(Knp1m_z[0]) * (hnp1mp1_z[1] - hnp1mp1_z[0] - dz)/dz*dt;
+      //IN[j*N+i] = -0.5*(Knp1m_z[0]+Knp1m_z[1]) * (hnp1mp1_z[1] - hnp1mp1_z[0] - dz)/dz*dt;
+      
       //Psidiff[j*N+i] = hnp1mp1_z[1] - hnp1mp1_z[0]; 
       Psidiff[j*N+i] = (hnp1mp1_z[0]);
     } else {
@@ -232,7 +235,10 @@ __global__ void RichZ(double *h_in, double *theta_in, double *K_in,
         h_out[k*M*N+j*N+i] = hnp1m_z[k];
         theta_out[k*M*N+j*N+i] = thetanp1m_z[k];
       }
-      IN[j*N+i] = -(Knp1m_z[0]) * (hnp1m_z[1] - hnp1m_z[0] - dz)/dz*dt;
+      
+      IN[j*N+i] = -(Knp1m_z[0]) * (hnp1m_z[1] - hnp1m_z[0] - dz)/dz*dt;      
+      //IN[j*N+i] = -0.5*(Knp1m_z[0]+Knp1m_z[1]) * (hnp1m_z[1] - hnp1m_z[0] - dz)/dz*dt;
+      
       //Psidiff[j*N+i] = hnp1m_z[1] - hnp1m_z[0];
       Psidiff[j*N+i] = (hnp1mp1_z[0]);
     }
@@ -277,7 +283,7 @@ __global__ void RichX(double *h_in, double *theta_in, double *K_in,
     // Loop for convergence test
     while (stop_flag == 0 && niter < maxiterX) {
       // Get C, K, theta from vanGenuchten function
-      vanGenuchten(Cnp1m_x, Knp1m_x, Ksat_x, thetanp1m_x, hnp1m_x, nv, N);
+      vanGenuchten(Cnp1m_x, Knp1m_x, Ksat_x, thetanp1m_x, hnp1m_x, nv, mv, N);
 
       // Set up the tri-digonal system in x-direction
       RichXMatrix(a_x, b_x, c_x, d_x, Cnp1m_x, Knp1m_x, K_in, hnp1m_x, h_in,
@@ -300,7 +306,7 @@ __global__ void RichX(double *h_in, double *theta_in, double *K_in,
         hnp1mp1_x[N-1] = hnp1mp1_x[N-2];
 
         // Get C, K, theta from vanGenuchten function
-        vanGenuchten(Cnp1m_x, Knp1m_x, Ksat_x, thetanp1m_x, hnp1mp1_x, nv, N);
+        vanGenuchten(Cnp1m_x, Knp1m_x, Ksat_x, thetanp1m_x, hnp1mp1_x, nv, mv, N);
 
         // Update solution from vectors to the global matrix
         for (int i = 0; i < N; i++) {
@@ -369,7 +375,7 @@ __global__ void RichY(double *h_in, double *theta_in, double *K_in,
     // Loop for convergence test
     while (stop_flag == 0 && niter < maxiterY) {
       // Get C, K, theta from vanGenuchten function
-      vanGenuchten(Cnp1m_y, Knp1m_y, Ksat_y, thetanp1m_y, hnp1m_y, nv, M);
+      vanGenuchten(Cnp1m_y, Knp1m_y, Ksat_y, thetanp1m_y, hnp1m_y, nv, mv, M);
 
       // Set up the tri-digonal system in y-direction
       RichYMatrix(a_y, b_y, c_y, d_y, Cnp1m_y, Knp1m_y, K_in, hnp1m_y, h_in,
@@ -391,7 +397,7 @@ __global__ void RichY(double *h_in, double *theta_in, double *K_in,
         hnp1mp1_y[M-1] = hnp1mp1_y[M-2];
 
         // Get C, K, theta from vanGenuchten function
-        vanGenuchten(Cnp1m_y, Knp1m_y, Ksat_y, thetanp1m_y, hnp1mp1_y, nv, M);
+        vanGenuchten(Cnp1m_y, Knp1m_y, Ksat_y, thetanp1m_y, hnp1mp1_y, nv, mv, M);
 
         // Update solution from vectors to the global matrix
         for (int j = 0; j < M; j++) {

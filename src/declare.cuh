@@ -40,6 +40,7 @@ __constant__ double lambda;         // [-]
 __constant__ double Ss;             // [1/m]
 __constant__ double poros;          // [-]
 __constant__ double nv;             // [-]
+__constant__ double mv;             // [-]
 
 __constant__ double psi_min;        // [m]
 __constant__ double stop_tol;       // [m]

@@ -51,6 +51,7 @@ void cudaConstTransfer(ProjectClass *Project, DomainClass *Topo,
     SoilPropertiesClass *Soil, SubsurfaceClass *Richard3D, 
     OverlandClass *Swe2D) {
   double dt_h = Project->dt_data/Project->substeps;
+  double m = 1.0 - 1.0/Soil->n;
   cudaMemcpyToSymbol(dx, &Topo->GridSizeDx, sizeof(double));
   cudaMemcpyToSymbol(dy, &Topo->GridSizeDy, sizeof(double));
   cudaMemcpyToSymbol(dz, &Topo->GridSizeDz, sizeof(double));
@@ -65,6 +66,7 @@ void cudaConstTransfer(ProjectClass *Project, DomainClass *Topo,
   cudaMemcpyToSymbol(theta_R, &Soil->Theta_R, sizeof(double));
   cudaMemcpyToSymbol(theta_S, &Soil->Theta_S, sizeof(double));
   cudaMemcpyToSymbol(nv, &Soil->n, sizeof(double));
+  cudaMemcpyToSymbol(mv, &m, sizeof(double));
   cudaMemcpyToSymbol(poros, &Soil->porosity, sizeof(double));
   cudaMemcpyToSymbol(Ss, &Soil->Ss, sizeof(double));
 
